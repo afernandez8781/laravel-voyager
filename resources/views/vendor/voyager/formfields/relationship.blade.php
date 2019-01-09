@@ -16,13 +16,14 @@
 
                 @if(isset($query))
                     {{-- Si queremos mostrar el enlace a una relación --}}
-                    <p>
-                        <a href="{{(route(
-                            'voyager.'.Voyager::model('DataType')->whereName($options->table)->first()->slug.'.show', $query->{$options->key}
-                            ))}}">
-                                {{ $query->{$options->label} }}
-                        </a>
-                    </p>
+                    @if(auth()->user()->role_id === \App\User::ADMIN)
+                        <p><a href="{{route(
+                            'voyager.'.Voyager::model('dataType')->whereName($options->table)->first()->slug.'.show', $query->{$options->key}
+                            )}}">{{ $query->{$options->label} }}</a></p>
+                            {{-- en otro caso, (customer) mostramos texto plano --}}
+                    @else
+                        <p>{{ $query->{$options->label} }}</p>
+                    @endif
                 @else
                     <p>No hay información</p>
                 @endif
